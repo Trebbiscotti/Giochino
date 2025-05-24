@@ -10,7 +10,7 @@ COLORE_SFONDO = (50, 150, 255)
 dimensioni_giocatore = 45
 #colore_giocatore = (255, 255, 255)
 posizione_giocatore_x = LARGHEZZA_FINESTRA // 2 - dimensioni_giocatore // 2
-posizione_giocatore_y = ALTEZZA_FINESTRA - dimensioni_giocatore -10
+posizione_giocatore_y = ALTEZZA_FINESTRA - dimensioni_giocatore - 10
 velocita_giocatore = 10
 
 #colore_oggetto_cadente = (255, 0, 0)
@@ -25,8 +25,11 @@ pygame.display.set_caption("Cattura gli oggetti cadenti")
 
 font_punteggio = pygame.font.SysFont(None, 35)
 
-immagine_giocatore = pygame.image.load("giocatore.png")
-immagine_oggetto_cadente = pygame.image.load("oggetto_cadente.png")
+immagine_giocatore = pygame.image.load("maiale.png")
+immagine_giocatore = pygame.transform.scale(immagine_giocatore, (dimensioni_giocatore, dimensioni_giocatore))
+
+immagine_oggetto_cadente = pygame.image.load("meteora1.png")
+immagine_oggetto_cadente = pygame.transform.scale(immagine_oggetto_cadente, (dimensioni_oggetto_cadente, dimensioni_oggetto_cadente))
 
 def disegna_oggetti():
     global posizione_giocatore_x, posizione_giocatore_y, lista_oggetti_cadenti, punteggio
@@ -38,7 +41,7 @@ def disegna_oggetti():
     for obj in lista_oggetti_cadenti:
         schermo.blit(immagine_oggetto_cadente, (obj[0], obj[1]))
 
-    testo_punteggio = font_punteggio.render(f"Punteggio: {punteggio}", True, (255, 255, 255))
+    testo_punteggio = font_punteggio.render(f"Punteggio: {punteggio}", True, (0, 0, 0))
     schermo.blit(testo_punteggio, (10, 10))
 
     pygame.display.update()
@@ -48,7 +51,7 @@ prossimo_aumento_velocita = 10
 probabilità_generazione = 15
 
 def aggiorna_oggetti_cadenti():
-    global lista_oggetti_cadenti, punteggio, velocita_caduta, prossimo_aumento_velocita, probabilità_generazione
+    global lista_oggetti_cadenti, punteggio, velocita_oggetto_cadente, prossimo_aumento_velocita, probabilità_generazione
     for obj in lista_oggetti_cadenti:
         obj[1] += velocita_oggetto_cadente
         if obj[1] > ALTEZZA_FINESTRA:
@@ -65,8 +68,8 @@ def aggiorna_oggetti_cadenti():
 def genera_oggetti_cadenti():
     global probabilità_generazione
     if random.randint(1, probabilità_generazione) == 1:
-        x_pos = random.randint(0, LARGHEZZA_FINESTRA - dimensioni_oggetto_cadente)
-        lista_oggetti_cadenti.append([x_pos, 0, dimensioni_oggetto_cadente, dimensioni_oggetto_cadente])
+        pos_x = random.randint(0, LARGHEZZA_FINESTRA - dimensioni_oggetto_cadente)
+        lista_oggetti_cadenti.append([pos_x, 0, dimensioni_oggetto_cadente, dimensioni_oggetto_cadente])
 
 def controlla_collisioni():
     global in_esecuzione
