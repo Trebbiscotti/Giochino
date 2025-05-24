@@ -39,3 +39,62 @@ def disegna_oggetti():
         schermo.blit(immagine_oggetto_cadente, (obj[0], obj[1]))
 
     testo_punteggio = font_punteggio.render(f"Punteggio: {punteggio}", True, (255, 255, 255))
+    schermo.blit(testo_punteggio, (10, 10))
+
+    pygame.display.update()
+
+prossimo_aumento_velocita = 10
+
+probabilità_generazione = 15
+
+def aggiorna_oggetti_cadenti():
+    global lista_oggetti_cadenti, punteggio, velocita_caduta, prossimo_aumento_velocita, probabilità_generazione
+    for obj in lista_oggetti_cadenti:
+        obj[1] += velocita_oggetto_cadente
+        if obj[1] > ALTEZZA_FINESTRA:
+            lista_oggetti_cadenti.remove(obj)
+            punteggio += 1
+
+            if punteggio >= prossimo_aumento_velocita:
+                velocita_oggetto_cadente += 1
+                prossimo_aumento_velocita += 10
+            
+            if punteggio % 10 == 0:
+                probabilità_generazione = max(2, probabilità_generazione - 1)
+        
+def genera_oggetti_cadenti():
+    global probabilità_generazione
+    if random.randint(1, probabilità_generazione) == 1:
+        x_pos = random.randint(0, LARGHEZZA_FINESTRA - dimensioni_oggetto_cadente)
+        lista_oggetti_cadenti.append([x_pos, 0, dimensioni_oggetto_cadente, dimensioni_oggetto_cadente])
+
+def controlla_collisioni():
+    global in_esecuzione
+    rettangolo_giocatore = pygame.Rect(posizione_giocatore_x, posizione_giocatore_y, dimensioni_giocatore, dimensioni_giocatore)
+    for obj in lista_oggetti_cadenti:
+        rettangolo_oggetto = pygame.Rect(obj[0], obj[1], dimensioni_oggetto_cadente, dimensioni_oggetto_cadente)
+        if rettangolo_giocatore.colliderect(rettangolo_oggetto):
+            in_esecuzione = False
+            
+in_esecuzione = True
+orologio = pygame.time.Clock()
+
+while in_esecuzione:
+    for evento in pygame.event.get():
+        if evento.type == pygame.QUIT:
+            in_esecuzione = False
+
+    tasti = pygame.key.get_pressed()
+    if tasti[pygame.K_LEFT] and posizione_giocatore_x > 0:
+        posizione_giocatore_x -= velocita_giocatore
+    if tasti[pygame.K_RIGHT] and posizione_giocatore_x < LARGHEZZA_FINESTRA - dimensioni_giocatore:
+        posizione_giocatore_x += velocita_giocatore
+
+    genera_oggetti_cadenti()
+    aggiorna_oggetti_cadenti()
+    controlla_collisioni()
+    disegna_oggetti()
+
+    orologio.tick(30)
+
+pygame.quit()
