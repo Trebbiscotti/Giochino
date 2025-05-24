@@ -10,15 +10,16 @@ ALTEZZA_FINESTRA = 600
 COLORE_SFONDO = (50, 150, 255)
 
 # Variabili del giocatore
-dimensioni_giocatore = 60
-posizione_giocatore_x = LARGHEZZA_FINESTRA // 2 - dimensioni_giocatore // 2
-posizione_giocatore_y = ALTEZZA_FINESTRA - dimensioni_giocatore - 10
+altezza_giocatore = 60
+larghezza_giocatore = 40
+posizione_giocatore_x = LARGHEZZA_FINESTRA // 2 - larghezza_giocatore // 2
+posizione_giocatore_y = ALTEZZA_FINESTRA - altezza_giocatore - 10
 velocita_giocatore = 15
 
 # Variabili degli oggetti cadenti
 dimensioni_oggetto_cadente = 45
 lista_oggetti_cadenti = []
-velocita_oggetto_cadente = 1
+velocita_oggetto_cadente = 5
 probabilità_generazione = 15
 
 # Punteggio
@@ -39,7 +40,7 @@ immagini_personaggi = [
 
 # Ridimensiona le immagini dei personaggi
 immagini_personaggi = [
-    pygame.transform.scale(img, (dimensioni_giocatore, dimensioni_giocatore))
+    pygame.transform.scale(img, (larghezza_giocatore, altezza_giocatore))
     for img in immagini_personaggi
 ]
 
@@ -88,7 +89,7 @@ def genera_oggetti_cadenti():
 # Funzione per controllare le collisioni
 def controlla_collisioni():
     global in_esecuzione
-    rettangolo_giocatore = pygame.Rect(posizione_giocatore_x, posizione_giocatore_y, dimensioni_giocatore, dimensioni_giocatore)
+    rettangolo_giocatore = pygame.Rect(posizione_giocatore_x, posizione_giocatore_y, larghezza_giocatore, altezza_giocatore)
     for obj in lista_oggetti_cadenti:
         rettangolo_oggetto = pygame.Rect(obj[0], obj[1], dimensioni_oggetto_cadente, dimensioni_oggetto_cadente)
         if rettangolo_giocatore.colliderect(rettangolo_oggetto):
@@ -112,7 +113,7 @@ def avvia_gioco(personaggio_selezionato):
         tasti = pygame.key.get_pressed()
         if tasti[pygame.K_LEFT] and posizione_giocatore_x > 0:
             posizione_giocatore_x -= velocita_giocatore
-        if tasti[pygame.K_RIGHT] and posizione_giocatore_x < LARGHEZZA_FINESTRA - dimensioni_giocatore:
+        if tasti[pygame.K_RIGHT] and posizione_giocatore_x < LARGHEZZA_FINESTRA - larghezza_giocatore:
             posizione_giocatore_x += velocita_giocatore
 
         genera_oggetti_cadenti()

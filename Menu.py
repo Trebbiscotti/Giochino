@@ -34,9 +34,9 @@ image2 = pygame.image.load("Lebron.png")
 image3 = pygame.image.load("Nurra.png")
 
 # Ridimensionamento immagini
-image1 = pygame.transform.scale(image1, (150, 150))
-image2 = pygame.transform.scale(image2, (150, 150))
-image3 = pygame.transform.scale(image3, (150, 150))
+image1 = pygame.transform.scale(image1, (110, 150))
+image2 = pygame.transform.scale(image2, (110, 150))
+image3 = pygame.transform.scale(image3, (110, 150))
 
 # Posizioni delle immagini
 images = [
