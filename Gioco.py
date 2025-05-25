@@ -15,6 +15,8 @@ larghezza_giocatore = 40
 posizione_giocatore_x = LARGHEZZA_FINESTRA // 2 - larghezza_giocatore // 2
 posizione_giocatore_y = ALTEZZA_FINESTRA - altezza_giocatore - 10
 velocita_giocatore = 15
+numero_vite = 3
+vite = 3
 
 # Variabili degli oggetti cadenti
 dimensioni_oggetto_cadente = 45
@@ -25,6 +27,7 @@ probabilità_generazione = 15
 # Punteggio
 punteggio = 0
 prossimo_aumento_velocita = 10
+prossimo_incremento_vite = 50  # Il primo incremento avviene a 50 punti
 
 # Schermo e font
 schermo = pygame.display.set_mode((LARGHEZZA_FINESTRA, ALTEZZA_FINESTRA))
@@ -63,19 +66,37 @@ def disegna_oggetti(immagine_giocatore):
 
     pygame.display.update()
 
+def genera_cuori():
+    global numero_vite
+    image4 = pygame.image.load("cuore.png")
+    image4 = pygame.transform.scale(image4, (30, 30))  # Ridimensiona il cuore
+    x_offset = LARGHEZZA_FINESTRA - 40  # Posizione iniziale (a destra)
+    y_offset = 10  # Posizione verticale (in alto)
+
+    for i in range(numero_vite):
+        schermo.blit(image4, (x_offset - i * 40, y_offset))  # Disegna i cuori con uno spazio tra loro
+
 # Funzione per aggiornare gli oggetti cadenti
 def aggiorna_oggetti_cadenti():
-    global lista_oggetti_cadenti, punteggio, velocita_oggetto_cadente, prossimo_aumento_velocita, probabilità_generazione
+    global lista_oggetti_cadenti, punteggio, velocita_oggetto_cadente, prossimo_aumento_velocita, probabilità_generazione, numero_vite, prossimo_incremento_vite
+
     for obj in lista_oggetti_cadenti:
         obj[1] += velocita_oggetto_cadente
         if obj[1] > ALTEZZA_FINESTRA:
             lista_oggetti_cadenti.remove(obj)
             punteggio += 1
 
+            # Controlla se il punteggio ha raggiunto il prossimo incremento di vite
+            if punteggio >= prossimo_incremento_vite:
+                numero_vite += 1  # Aggiungi una vita
+                prossimo_incremento_vite += 50  # Aggiorna il prossimo incremento
+
+            # Aumenta la velocità degli oggetti cadenti ogni 10 punti
             if punteggio >= prossimo_aumento_velocita:
                 velocita_oggetto_cadente += 1
                 prossimo_aumento_velocita += 10
-            
+
+            # Riduci la probabilità di generazione ogni 10 punti
             if punteggio % 10 == 0:
                 probabilità_generazione = max(2, probabilità_generazione - 1)
 
@@ -88,16 +109,19 @@ def genera_oggetti_cadenti():
 
 # Funzione per controllare le collisioni
 def controlla_collisioni():
-    global in_esecuzione
+    global in_esecuzione, numero_vite
     rettangolo_giocatore = pygame.Rect(posizione_giocatore_x, posizione_giocatore_y, larghezza_giocatore, altezza_giocatore)
     for obj in lista_oggetti_cadenti:
         rettangolo_oggetto = pygame.Rect(obj[0], obj[1], dimensioni_oggetto_cadente, dimensioni_oggetto_cadente)
         if rettangolo_giocatore.colliderect(rettangolo_oggetto):
-            in_esecuzione = False
+            lista_oggetti_cadenti.remove(obj)  # Rimuovi l'oggetto che ha colpito il giocatore
+            numero_vite -= 1  # Riduci il numero di vite
+            if numero_vite <= 0:
+                in_esecuzione = False  # Termina il gioco se le vite sono finite
 
 # Funzione principale per avviare il gioco
 def avvia_gioco(personaggio_selezionato):
-    global in_esecuzione, posizione_giocatore_x, velocita_giocatore
+    global in_esecuzione, posizione_giocatore_x, velocita_giocatore, vite
 
     # Seleziona l'immagine del giocatore in base al personaggio selezionato
     immagine_giocatore = immagini_personaggi[personaggio_selezionato]
@@ -119,8 +143,20 @@ def avvia_gioco(personaggio_selezionato):
         genera_oggetti_cadenti()
         aggiorna_oggetti_cadenti()
         controlla_collisioni()
-        disegna_oggetti(immagine_giocatore)
 
+        # Disegna gli oggetti e i cuori
+        disegna_oggetti(immagine_giocatore)
+        i = 0
+        if i == 0:
+            genera_cuori()
+            i += 1
+        
+        pygame.display.update()
+        if numero_vite != vite:
+            genera_cuori()  
+        vite = numero_vite  # Aggiorna il numero di vite      
+
+        #pygame.display.update()
         orologio.tick(30)
 
     pygame.quit()
