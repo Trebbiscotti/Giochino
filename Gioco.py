@@ -98,7 +98,7 @@ def aggiorna_oggetti_cadenti():
 
             # Riduci la probabilità di generazione ogni 10 punti
             if punteggio % 10 == 0:
-                probabilità_generazione = max(2, probabilità_generazione - 1)
+                probabilità_generazione = max(4, probabilità_generazione - 1)
 
 # Funzione per generare oggetti cadenti
 def genera_oggetti_cadenti():
