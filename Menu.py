@@ -10,7 +10,7 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Menù Meteore")
-sfondo = pygame.image.load("sfondo.png")
+sfondo = pygame.image.load("sfondo1.png")
 sfondo = pygame.transform.scale(sfondo, (SCREEN_WIDTH, SCREEN_HEIGHT)) 
 
 # Colori
@@ -23,10 +23,10 @@ font_option = pygame.font.Font(None, 40)
 
 # Testo del titolo
 title_text = font_title.render("Attento alle meteore", True, WHITE)
-title_rect = title_text.get_rect(center=(SCREEN_WIDTH // 2, 550))
+title_rect = title_text.get_rect(center=(SCREEN_WIDTH // 2, 100))
 
 selection_text = font_option.render("Scegli il tuo personaggio", True, WHITE)
-selection_rect = selection_text.get_rect(center=(SCREEN_WIDTH // 2, 200))
+selection_rect = selection_text.get_rect(center=(SCREEN_WIDTH // 2, 550))
 
 # Caricamento immagini
 image1 = pygame.image.load("astronauta.png")
@@ -40,9 +40,9 @@ image3 = pygame.transform.scale(image3, (110, 150))
 
 # Posizioni delle immagini
 images = [
-    {"image": image1, "rect": image1.get_rect(center=(SCREEN_WIDTH // 2 - 200, SCREEN_HEIGHT // 2))},
-    {"image": image2, "rect": image2.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))},
-    {"image": image3, "rect": image3.get_rect(center=(SCREEN_WIDTH // 2 + 200, SCREEN_HEIGHT // 2))}
+    {"image": image1, "rect": image1.get_rect(center=(SCREEN_WIDTH // 2 - 200, 370))},
+    {"image": image2, "rect": image2.get_rect(center=(SCREEN_WIDTH // 2, 370))},
+    {"image": image3, "rect": image3.get_rect(center=(SCREEN_WIDTH // 2 + 200, 370))},
 ]
 
 # Caricamento sfondo
