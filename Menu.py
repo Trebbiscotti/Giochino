@@ -1,9 +1,14 @@
 import pygame
 import sys
-from Gioco import avvia_gioco  # Importa la funzione principale del gioco
 
 # Inizializzazione di Pygame
 pygame.init()
+
+# Caricamento della musica
+pygame.mixer.init()
+pygame.mixer.music.load("musica_scelta.mp3")  # Sostituisci con il nome del file della tua musica
+pygame.mixer.music.set_volume(0.5)  # Imposta il volume (0.0 - 1.0)
+pygame.mixer.music.play(-1)  # Riproduci in loop (-1 per loop infinito)
 
 # Dimensioni dello schermo
 SCREEN_WIDTH = 800
@@ -65,6 +70,8 @@ def draw_menu():
 
 # Funzione per avviare il gioco
 def start_game():
+    from Gioco import avvia_gioco  # Importa all'interno della funzione per evitare dipendenze circolari
+    pygame.mixer.music.stop()  # Ferma la musica
     avvia_gioco(current_selection)  # Passa l'indice del personaggio selezionato
 
 # Ciclo principale del menù
@@ -88,7 +95,7 @@ def main():
 
         draw_menu()
         pygame.display.flip()
-        clock.tick(1000)
+        clock.tick(30)
 
 if __name__ == "__main__":
     main()

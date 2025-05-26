@@ -1,5 +1,7 @@
 import pygame
 import random
+from GameOver import schermata_game_over
+from Menu import main  # Importa la funzione principale del menù
 
 # Inizializzazione di Pygame
 pygame.init()
@@ -76,6 +78,17 @@ def genera_cuori():
     for i in range(numero_vite):
         schermo.blit(image4, (x_offset - i * 40, y_offset))  # Disegna i cuori con uno spazio tra loro
 
+def resetta_gioco():
+    global numero_vite, punteggio, lista_oggetti_cadenti, velocita_oggetto_cadente, probabilità_generazione, prossimo_aumento_velocita, prossimo_incremento_vite
+
+    numero_vite = 3  # Numero iniziale di vite
+    punteggio = 0  # Punteggio iniziale
+    lista_oggetti_cadenti = []  # Lista vuota di oggetti cadenti
+    velocita_oggetto_cadente = 5  # Velocità iniziale degli oggetti cadenti
+    probabilità_generazione = 15  # Probabilità iniziale di generazione degli oggetti
+    prossimo_aumento_velocita = 10  # Punteggio per il prossimo aumento di velocità
+    prossimo_incremento_vite = 50  # Punteggio per il prossimo incremento di vite
+
 # Funzione per aggiornare gli oggetti cadenti
 def aggiorna_oggetti_cadenti():
     global lista_oggetti_cadenti, punteggio, velocita_oggetto_cadente, prossimo_aumento_velocita, probabilità_generazione, numero_vite, prossimo_incremento_vite
@@ -117,11 +130,20 @@ def controlla_collisioni():
             lista_oggetti_cadenti.remove(obj)  # Rimuovi l'oggetto che ha colpito il giocatore
             numero_vite -= 1  # Riduci il numero di vite
             if numero_vite <= 0:
-                in_esecuzione = False  # Termina il gioco se le vite sono finite
+                in_esecuzione = False  # Termina il ciclo principale
+                schermata_game_over(schermo, LARGHEZZA_FINESTRA, ALTEZZA_FINESTRA, punteggio)  # Mostra la schermata di "Game Over"
+                resetta_gioco()  # Reimposta le variabili del gioco
+                main()  # Torna al menù principale
 
 # Funzione principale per avviare il gioco
 def avvia_gioco(personaggio_selezionato):
     global in_esecuzione, posizione_giocatore_x, velocita_giocatore, vite
+
+    # Caricamento della musica del gioco
+    pygame.mixer.init()
+    pygame.mixer.music.load("sound_track.mp3")  # Sostituisci con il nome del file della tua musica
+    pygame.mixer.music.set_volume(0.5)  # Imposta il volume (0.0 - 1.0)
+    pygame.mixer.music.play(-1)  # Riproduci in loop (-1 per loop infinito)
 
     # Seleziona l'immagine del giocatore in base al personaggio selezionato
     immagine_giocatore = immagini_personaggi[personaggio_selezionato]
@@ -159,4 +181,5 @@ def avvia_gioco(personaggio_selezionato):
         #pygame.display.update()
         orologio.tick(30)
 
+    pygame.mixer.music.stop()  # Ferma la musica quando il gioco termina
     pygame.quit()
