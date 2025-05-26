@@ -6,6 +6,8 @@ from Menu import main  # Importa la funzione principale del menù
 # Inizializzazione di Pygame
 pygame.init()
 
+game_over_sound = pygame.mixer.Sound("game_over.mp3")  
+
 # Dimensioni della finestra
 LARGHEZZA_FINESTRA = 800
 ALTEZZA_FINESTRA = 600
@@ -130,6 +132,8 @@ def controlla_collisioni():
             lista_oggetti_cadenti.remove(obj)  # Rimuovi l'oggetto che ha colpito il giocatore
             numero_vite -= 1  # Riduci il numero di vite
             if numero_vite <= 0:
+                pygame.mixer.music.stop()  # Ferma la musica quando il gioco termina
+                game_over_sound.play()
                 in_esecuzione = False  # Termina il ciclo principale
                 schermata_game_over(schermo, LARGHEZZA_FINESTRA, ALTEZZA_FINESTRA, punteggio)  # Mostra la schermata di "Game Over"
                 resetta_gioco()  # Reimposta le variabili del gioco
@@ -181,5 +185,4 @@ def avvia_gioco(personaggio_selezionato):
         #pygame.display.update()
         orologio.tick(30)
 
-    pygame.mixer.music.stop()  # Ferma la musica quando il gioco termina
     pygame.quit()

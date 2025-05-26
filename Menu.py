@@ -79,6 +79,10 @@ def main():
     global current_selection
     clock = pygame.time.Clock()
 
+    pygame.mixer.music.load("musica_scelta.mp3")  # Sostituisci con il nome del file della tua musica
+    pygame.mixer.music.set_volume(0.5)  # Imposta il volume (0.0 - 1.0)
+    pygame.mixer.music.play(-1)  # Riproduci in loop (-1 per loop infinito)
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
